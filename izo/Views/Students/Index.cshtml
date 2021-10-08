@@ -1,0 +1,108 @@
+﻿@model IEnumerable<izo.Models.Student>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="row">
+    <h1 class=" mr-auto">Students</h1>
+    <form id="searchFrm" class="form-inline my-2 my-lg-0" >
+        <input class="form-control mr-sm-2" name="keyword" type="search" placeholder="Search" aria-label="Search">
+    </form>
+
+</div>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Number)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GsmNumber)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Number)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GsmNumber)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@section Scripts{
+<script>
+
+    let el = document.querySelector("[type=search]")
+    el.addEventListener('keyup', (e) => {
+        e.preventDefault()
+        let keyword = el.value
+        $.ajax({
+            url: `/api/Students?keyword=${keyword}`,
+            method: "get",
+            success: function (result) {
+
+                let tableBody = document.querySelector("tbody")
+                if (result?.length > 0) {
+                    tableBody.innerHTML = ``
+                    for (var i = 0; i < result.length; i++) {
+                        console.log(result[i]);
+                        tableBody.innerHTML += `
+                                            <tr>
+                                                <td>
+                                                    ${result[i].fullName}
+                                                </td>
+                                                <td>
+                                                    ${result[i].number}
+                                                </td>
+                                                <td>
+                                                    ${result[i].email}
+                                                </td>
+                                                <td>
+                                                    ${result[i].gsmNumber}
+                                                </td>
+                                                <td>
+                                                    <a href="/Studends/Edit/${result[i].id}">Edit</a> |
+                                                    <a href="/Studends/Details/${result[i].id}">Details</a> |
+                                                    <a href="/Studends/Delete/${result[i].id}">Delete</a>
+                                                </td>
+                                            </tr>
+                                    `
+                    }
+
+                } else {
+                    tableBody.innerHTML = `<tr><td colSpan="5"><div class="alert alert-warning text-center" role="alert">There are no data matching the search word</div> <td><tr>`
+
+                }
+
+            }
+        })
+    })
+</script>
+ }
