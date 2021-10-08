@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,12 +32,16 @@ namespace izo
         public void ConfigureServices(IServiceCollection services)
         {
 
+
             services.AddControllers();
+            services.AddControllersWithViews()
+                    .AddViewLocalization();
             services.AddDbContext<DataDbContext>(opt =>
             {
                 opt.UseSqlServer(Configuration.GetConnectionString("Default"));
 
             });
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(config =>
             {
                 config.LoginPath = "/Account/login";
@@ -45,6 +51,20 @@ namespace izo
             services.AddLocalization();
             services.AddScoped<ILanguageService, LanguageService>();
             services.AddScoped<ILocalizationService, LocalizationService>();
+
+            var serviceProvider = services.BuildServiceProvider();
+            var languageService = serviceProvider.GetRequiredService<ILanguageService>();
+            var languages = languageService.GetLanguages();
+            var cultures = languages.Select(x => new CultureInfo(x.Culture)).ToArray();
+
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var englishCulture = cultures.FirstOrDefault(x => x.Name == "en-US");
+                options.DefaultRequestCulture = new RequestCulture(englishCulture?.Name ?? "en-US");
+
+                options.SupportedCultures = cultures;
+                options.SupportedUICultures = cultures;
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "izo", Version = "v1" });

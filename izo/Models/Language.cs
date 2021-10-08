@@ -9,7 +9,7 @@ namespace izo.Models
     public class Language
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Culture { get; set; }
         public ICollection<Resource> Resources { get; set; } = new List<Resource>();

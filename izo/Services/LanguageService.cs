@@ -19,12 +19,12 @@ namespace izo.Services
 
         public IEnumerable<Language> GetLanguages()
         {
-            return _context.Languages.ToList();
+            return _context.LanguagesList.ToList();
         }
 
         public Language GetLanguageByCulture(string culture)
         {
-            return _context.Languages.FirstOrDefault(x =>
+            return _context.LanguagesList.FirstOrDefault(x =>
                 x.Culture.Trim().ToLower() == culture.Trim().ToLower());
         }
     }

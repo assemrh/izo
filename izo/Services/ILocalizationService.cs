@@ -8,6 +8,6 @@ namespace izo.Services
 {
     public interface ILocalizationService
     {
-        Resource GetStringResource(string resourceKey, int languageId);
+        Resource GetStringResource(string resourceKey, Guid languageId);
     }
 }

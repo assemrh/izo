@@ -16,7 +16,7 @@ namespace izo.Data
         public DbSet<Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<ExamResult> ExamResults { get; set; }
-        public DbSet<Language> Languages { get; set; }
+        public DbSet<Language> LanguagesList { get; set; }
         public DbSet<Resource> Resources { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -40,10 +40,14 @@ namespace izo.Data
                 .HasMany(s => s.ExamResults)
                 .WithOne(e => e.Course)
                 .HasForeignKey(s => s.CourseID);
-            modelBuilder.Entity<Language>()
-                .HasMany(l => l.Resources)
-                .WithOne(r => r.Language)
-                .HasForeignKey(r => r.LanguageId);
+            //modelBuilder.Entity<Language>()
+            //    .HasMany(l => l.Resources)
+            //    .WithOne(r => r.Language)
+            //    .HasForeignKey(r => r.LanguageId);
+            //modelBuilder.Entity<Resource>()
+            //    .HasOne(r => r.Language)
+            //    .WithMany(l => l.Resources)
+            //    .HasForeignKey(r => r.LanguageId);
 
             modelBuilder.Entity<Course>().HasData(
             new Course { Id = Guid.NewGuid(), Name = "Example Course 1" },
@@ -69,9 +73,9 @@ namespace izo.Data
                 });
 
             modelBuilder.Entity<Language>().HasData(
-                new Language { Id= 1 , Name = "English", Culture ="en-US"},
-                new Language { Id= 2 , Name = "Turkish (Türkçe)", Culture ="tr-TR"},
-                new Language { Id= 3 , Name = "Arabic (العربية) ", Culture ="ar-SA"}
+                new Language { Id = Guid.NewGuid(), Name = "English", Culture ="en-US"},
+                new Language { Id = Guid.NewGuid(), Name = "Turkish (Türkçe)", Culture ="tr-TR"},
+                new Language { Id = Guid.NewGuid(), Name = "Arabic (العربية) ", Culture ="ar-SA"}
                 );
 
         }

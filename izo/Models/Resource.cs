@@ -9,8 +9,8 @@ namespace izo.Models
     public class Resource
     {
         [Key]
-        public int Id { get; set; }
-        public int LanguageId { get; set; }//LanguageId
+        public Guid Id { get; set; }
+        public Guid LanguageId { get; set; }//
         public string KeyName { get; set; }
         public string Value { get; set; }
 

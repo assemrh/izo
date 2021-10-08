@@ -16,14 +16,14 @@ namespace izo.Services
             _context = context;
         }
 
-        public Resource GetStringResource(string resourceKey, int languageId)
+        public Resource GetStringResource(string resourceKey, Guid languageId)
         {
             return _context.Resources.FirstOrDefault(x =>
                     x.KeyName.Trim().ToLower() == resourceKey.Trim().ToLower()
                     && x.LanguageId == languageId);
         }
 
-        Resource ILocalizationService.GetStringResource(string resourceKey, int languageId)
+        Resource ILocalizationService.GetStringResource(string resourceKey, Guid languageId)
         {
             throw new NotImplementedException();
         }
